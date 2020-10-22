@@ -2,7 +2,7 @@
 layout: post
 title: Installing Splunk from the Windows Command Line
 ---
-
+Windows is pointy clicky, how do I command line?!?!
 
 ## Introduction:
 
