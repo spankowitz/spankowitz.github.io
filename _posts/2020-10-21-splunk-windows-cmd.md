@@ -14,11 +14,11 @@ For the purposes of this little guide, we are presuming you have a basic shell o
 
 ## Uno: Get Splunk
 
-We’ll need a copy of the forwarder to install.  Splunk keeps older versions of the forwarder available, so make sure to click “older releases” as running a newer forwarder with an older version indexer may cause issues.  [Splunk Universal Forwarder](https://www.splunk.com/en_us/download/universal-forwarder.html)
+We’ll need a copy of the forwarder to install.  Splunk keeps older versions of the forwarder available, so make sure to click “older releases” and find the version of the forwarder that mis compatible with your indexer as running a newer forwarder with an older version indexer may cause issues.  [Splunk Universal Forwarder](https://www.splunk.com/en_us/download/universal-forwarder.html)
 
 ## Dos: Install Splunk
 
-This part is the part that inspired me to write this.  It took way too long how to do this from the command line.  Linux?  Yeah, install is pretty easy: untar stuff.  But Windows is made to click and run, so this took a lot of reading to get the commands just right on a limited shell.
+This part is the part that inspired me to write this.  It took way too long how to do this from the command line.  Linux?  Yeah, install is pretty easy: untar stuff.  But Windows MSI/EXE is made to click and run, so this took a lot of reading to get the commands just right on a limited shell.
 
 However you can, get the forwarder on the target.  EDR makes it easy to get and put files on the client, but for red teamers, certutil, powershell IEX downloadstring, wget, iwr… you get the picture.
 
