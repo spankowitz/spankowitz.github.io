@@ -245,4 +245,4 @@ I'm so close... well, php worked before, so let's use it again.
 
 BOOM!  Shell pops, whoami says I'm root.  Collect flag, game over.
 
-What other ways could I have gotten root?
+What other ways could I have gotten root?  I didn't even do anything with the php file uploads.
