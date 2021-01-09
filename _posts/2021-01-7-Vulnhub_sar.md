@@ -80,7 +80,7 @@ Robots gives us a single entry:
 
 Let's try navigating there:
 
---pic of sar2html site--
+![sar2html](/images/sar0.png)
 
 This looks like a default page of sar2html.  What the hell is sar2html?  Sometimes punching something into a search engine really is the first thing you should do.  Since I had never heard of it, I wanted to learn what it was and what it did.  But guess what the first result was?  [Exploit-DB 47204](https://www.exploit-db.com/exploits/47204)
 
@@ -88,9 +88,13 @@ Let's take a look.  The page is ridiculously simple.  It looks like you can get 
 
 I ran some other commands: cat etc/passwd, pwd, etc.  Ok, I can definitely run commands, but the way they are displayed, it's really difficult to read.  Maybe the machine has netcat installed and we can get a shell?  Oh wait, we're still enumerating.  What was that other file Nmap foud for us?
 
+![sar2html](/images/sar2.png)
+
 ### phpinfo.php
 
 This page should definitely not be exposed.  Right at the top, it's telling us it's running PHP 7.1.32 on Ubuntu -- mental note: run searchsploit on this version.  But let's keep looking at the file... configuration path, charset, bla bla bla... WAIT!  "file_uploads" is "On".  That doesn't sound good and can definitely be a way in or maybe a way to root.
+
+![sar2html](/images/sar1.png)
 
 At this point, I'm not going to bother scanning SSH as it's pretty obvious this box is about abusing this sar2html thingamajiggy and PHP.  But just to be sure there are no other interesting directories, let's run gobuster.
 
