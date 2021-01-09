@@ -48,7 +48,8 @@ Nmap done: 1 IP address (1 host up) scanned in 50.80 seconds
 ```
 Ok, so we already kow it's a Linux box running Apache.  With only SSH and HTTP open, most likely we need to poke at the web site.  As soon as you think web, 2 things should come to mind: 1) find interesting directories, which means you should poke at 2) robots.txt.
 
-Now, as part of enumeration, I generally always run 3 scans: "-A", "-p-", and "--script vuln".  "-A" gives you service versions, OS detections, default scripts, and traceroute.  "-A" isn't really necessary for CTFs or Vulnhub boxes as we already know where the box is (we don't need traceroute), but I like to use it as I think it's more realistic.  You can just as easily use "-sC -sV" (default scripts and service version) to achieve similar results.  "-p-" scans every single port, which I always do as CTFs can try to hife things on non-standard ports and you never know when you might miss something.  Finally "--script vuln" runs nmap scripts to cehck for vulnerabilities based on the available port.
+Now, as part of enumeration, I generally always run 3 scans: "-A", "-p-", and "--script vuln".  "-A" gives you service versions, OS detections, default scripts, and traceroute.  "-A" isn't really necessary for 
+s or Vulnhub boxes as we already know where the box is (we don't need traceroute), but I like to use it as I think it's more realistic.  You can just as easily use "-sC -sV" (default scripts and service version) to achieve similar results.  "-p-" scans every single port, which I always do as CTFs can try to hide things on non-standard ports and you never know when you might miss something.  Finally "--script vuln" runs nmap scripts to cehck for vulnerabilities based on the available port.
 
 The "vuln" scan gave us some more info:
 ```
