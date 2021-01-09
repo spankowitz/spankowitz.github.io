@@ -3,8 +3,6 @@ layout: post
 title: Vulnhub:Sar
 ---
 
-### Introduction
-
 Vulnhub is awesome.  I'm not here to tell you about it, so go find out for yourself: [Vulnhub](https://www.vulnhub.com/resources/).  Today's box on my OSCP journey is [Sar](https://www.vulnhub.com/entry/sar-1,425/).
 
 ### Disclaimer
