@@ -76,13 +76,13 @@ Note that it ran the "http-enum" nmap script for us.  We didn't have to go looki
 Robots gives us a single entry:
 > sar2HTML
 
-Let's try navigating there:
-
-![sar2html](/images/sar0.png)
+Let's try navigating there...
 
 This looks like a default page of sar2html.  What the hell is sar2html?  Sometimes punching something into a search engine really is the first thing you should do.  Since I had never heard of it, I wanted to learn what it was and what it did.  But guess what the first result was?  [Exploit-DB 47204](https://www.exploit-db.com/exploits/47204)
 
 Let's take a look.  The page is ridiculously simple.  It looks like you can get command execution by supplying a parameter in the URL.  Literally just add "?plot=;" to the URL and throw a command after the semicolon.  Ok, let's try it.  So I try "?plot;whoami" and refresh the page.  The page looks the same.  Huh?  Oh wait, I never finished reading the Exploit-DB page.  It says the results are at the bottom of a scroll screen after we push a button... after playing for 5 minutes, I finally figured out what that meant.  
+
+![sar2html](/images/sar0.png)
 
 I ran some other commands: cat etc/passwd, pwd, etc.  Ok, I can definitely run commands, but the way they are displayed, it's really difficult to read.  Maybe the machine has netcat installed and we can get a shell?  Oh wait, we're still enumerating.  What was that other file Nmap foud for us?
 
