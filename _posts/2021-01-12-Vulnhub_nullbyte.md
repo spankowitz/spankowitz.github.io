@@ -208,6 +208,64 @@ Oh, and don't forget searchsploit.  I don't see anything that jumps out at me.  
 
 ```
 searchsploit phpmyadmin
+--------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                             |  Path
+--------------------------------------------------------------------------- ---------------------------------
+phpMyAdmin - '/scripts/setup.php' PHP Code Injection                       | php/webapps/8921.sh
+phpMyAdmin - 'pmaPWN!' Code Injection / Remote Code Execution              | php/webapps/8992.php
+phpMyAdmin - 'preg_replace' (Authenticated) Remote Code Execution (Metaspl | php/remote/25136.rb
+phpMyAdmin - 'tbl_gis_visualization.php' Multiple Cross-Site Scripting Vul | php/webapps/38440.txt
+phpMyAdmin - (Authenticated) Remote Code Execution (Metasploit)            | php/remote/45020.rb
+phpMyAdmin - Client-Side Code Injection / Redirect Link Falsification      | php/webapps/15699.txt
+phpMyAdmin - Config File Code Injection (Metasploit)                       | php/webapps/16913.rb
+phpMyAdmin 2.11.1 - 'Server_Status.php' Cross-Site Scripting               | php/webapps/30733.txt
+phpMyAdmin 2.11.1 - 'setup.php' Cross-Site Scripting                       | php/webapps/30653.txt
+phpMyAdmin 2.5.7 - Remote code Injection                                   | php/webapps/309.c
+phpMyAdmin 2.6 - 'display_tbl_links.lib.php' Multiple Cross-Site Scripting | php/webapps/25153.txt
+phpMyAdmin 2.6 - 'select_server.lib.php' Multiple Cross-Site Scripting Vul | php/webapps/25152.txt
+phpMyAdmin 2.6 - 'theme_left.css.php' Multiple Cross-Site Scripting Vulner | php/webapps/25154.txt
+phpMyAdmin 2.6 - 'theme_right.css.php' Multiple Cross-Site Scripting Vulne | php/webapps/25155.txt
+phpMyAdmin 2.6 - Multiple Local File Inclusions                            | php/webapps/25156.txt
+phpMyAdmin 2.6.3-pl1 - Cross-Site Scripting / Full Path                    | php/webapps/12642.txt
+phpMyAdmin 2.6.4-pl1 - Directory Traversal                                 | php/webapps/1244.pl
+phpMyAdmin 2.7 - 'sql.php' Cross-Site Scripting                            | php/webapps/27632.txt
+phpMyAdmin 2.8.1 - Set_Theme Cross-Site Scripting                          | php/webapps/27435.txt
+phpMyAdmin 2.9.1 - Multiple Cross-Site Scripting Vulnerabilities           | php/webapps/29895.txt
+phpMyAdmin 2.x - 'db_create.php?db' Cross-Site Scripting                   | php/webapps/29058.txt
+phpMyAdmin 2.x - 'db_operations.php' Multiple Cross-Site Scripting Vulnera | php/webapps/29059.txt
+phpMyAdmin 2.x - 'error.php' Cross-Site Scripting                          | php/webapps/26199.txt
+phpMyAdmin 2.x - 'Export.php' File Disclosure                              | php/webapps/23640.txt
+phpMyAdmin 2.x - 'queryframe.php' Cross-Site Scripting                     | php/webapps/26392.txt
+phpMyAdmin 2.x - 'querywindow.php' Multiple Cross-Site Scripting Vulnerabi | php/webapps/29060.txt
+phpMyAdmin 2.x - 'server_databases.php' Cross-Site Scripting               | php/webapps/26393.txt
+phpMyAdmin 2.x - 'sql.php?pos' Cross-Site Scripting                        | php/webapps/29061.txt
+phpMyAdmin 2.x - Convcharset Cross-Site Scripting                          | php/webapps/25330.txt
+phpMyAdmin 2.x - External Transformations Remote Command Execution         | php/webapps/24817.txt
+phpMyAdmin 2.x - Information Disclosure                                    | php/webapps/22798.txt
+phpMyAdmin 2.x - Multiple Script Array Handling Full Path Disclosures      | php/webapps/29062.txt
+phpMyAdmin 3.0.1 - 'pmd_pdf.php' Cross-Site Scripting                      | php/webapps/32531.txt
+phpMyAdmin 3.1.0 - Cross-Site Request Forgery / SQL Injection              | php/webapps/7382.txt
+phpMyAdmin 3.2 - 'server_databases.php' Remote Command Execution           | php/webapps/32383.txt
+phpMyAdmin 3.3.0 - 'db' Cross-Site Scripting                               | php/webapps/33060.txt
+phpMyAdmin 3.3.x/3.4.x - Local File Inclusion via XML External Entity Inje | php/webapps/18371.rb
+phpMyAdmin 3.5.2.2 - 'server_sync.php' Backdoor (Metasploit)               | php/webapps/21834.rb
+phpMyAdmin 3.5.8/4.0.0-RC2 - Multiple Vulnerabilities                      | php/webapps/25003.txt
+phpMyAdmin 3.x - Swekey Remote Code Injection                              | php/webapps/17514.php
+phpMyAdmin 4.0.x/4.1.x/4.2.x - Denial of Service                           | php/dos/35539.txt
+phpMyAdmin 4.6.2 - (Authenticated) Remote Code Execution                   | php/webapps/40185.py
+phpMyAdmin 4.7.x - Cross-Site Request Forgery                              | php/webapps/45284.txt
+phpMyAdmin 4.8 - Cross-Site Request Forgery                                | php/webapps/46982.txt
+phpMyAdmin 4.8.0 < 4.8.0-1 - Cross-Site Request Forgery                    | php/webapps/44496.html
+phpMyAdmin 4.8.1 - (Authenticated) Local File Inclusion (1)                | php/webapps/44924.txt
+phpMyAdmin 4.8.1 - (Authenticated) Local File Inclusion (2)                | php/webapps/44928.txt
+phpMyAdmin 4.8.4 - 'AllowArbitraryServer' Arbitrary File Read              | php/webapps/46041.py
+phpMyAdmin 4.9.0.1 - Cross-Site Request Forgery                            | php/webapps/47385.txt
+phpMyAdmin3 (pma3) - Remote Code Execution                                 | php/webapps/17510.py
+WordPress Plugin Portable phpMyAdmin - Authentication Bypass               | php/webapps/23356.txt
+XAMPP 3.2.1 & phpMyAdmin 4.1.6 - Multiple Vulnerabilities                  | php/webapps/32721.txt
+--------------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+Papers: No Results
 ```
 
 ## Initial Compromise
@@ -256,7 +314,7 @@ Let's use our new creds and login.  Ok, nothing spectacular.  I see a database n
 
 ![nullbytehome](/images/nb6.png)
 
-Are those usernames and a hashed password?  w00t!  I copy the hash off and throw it over in ![Crackstation](https://crackstation.net/).
+Are those usernames and a hashed password?  w00t!  I copy the hash off and throw it over in [Crackstation](https://crackstation.net/).
 
 ![nullbytehome](/images/nb7.png)
 
