@@ -325,7 +325,7 @@ Analyzing 'YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE'
 [+] Cisco-IOS(SHA-256) 
 [+] Cisco Type 4 
 
-Cisco?  We're not onm a router.  I find another site to crack Cisco SHA256.  That doesn't work either.  Something is off here.  I repeat the entire process, racking my brain.  This doesn't make any sense.  Fianlly, I'm staring at the hash and it dawns on me... this looks a lot like base64 except it's missing equals signs.
+Cisco?  We're not on a router.  I find another site to crack Cisco SHA256.  That doesn't work either.  Something is off here.  I repeat the entire process, racking my brain.  This doesn't make any sense.  Fianlly, I'm staring at the hash and it dawns on me... this looks a lot like base64 except it's missing equals signs.
 
 ```
 # echo "YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE==" | base64 -d
