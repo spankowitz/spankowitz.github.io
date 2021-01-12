@@ -147,7 +147,7 @@ Not much luck there.  Unauthenticated login didn't work but we do see which serv
 
 Now, let's check out that web site.  As always, we run a directory brute force and check robots.txt.  Let's kick off gobuster and browse to the site:
 
->> gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://10.10.10.10 -t 25
+> gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://10.10.10.10 -t 25
 
 By the way, gobuster can brute force a few things: dns subdomains, directories, etc.  The above command is the prety standard one for brute forcing directories.  "-w" specifies the word list and on Kali, using the dirbuster one always works pretty well.  The only thing I like to add is manually checking for directories related to the site or company.  e.g. nike.com/nike.  If we were doing this for real, we would run a tool like cewl and get a wordlist based on the site contents.  "-u" is the URL.  Not that if you want to go down a level, you have to add it to the URL.  For example, say you found nike.com/admin on your first run.  You would then have to run gobuster again like: -u "http://nike.com/admin" - gobuster is NOT recursive by default.  That's generally a good thing as the old dirbuster is slow as a dial up modem when you turn on recursion.  Finally, "-t" is the number of threads.  In the real world, a WAF or even fail2ban would crush our brute force, so you would do this very slow, maybe 2 threads.  Since this is a for learning, we crank it up for the sake of speed.
 
@@ -283,21 +283,21 @@ Note the top and bottom of the request pane.  It's an HTTP POST with the pma_use
 
 Hydra is another versatile tool well worth putting in your cheat sheet.  Here's the command I drew up:
 
->>hydra -l "root" -P rockyou.txt 10.10.10.10 http-post-form "/phpmyadmin/index.php:pma_username=^USER^&pma_password=^PASS^&server=1&target=index.php&token=229b41f3a9baa221b3a9939893367538:#1045 Cannot log in to the MySQL server" -t 50 -V
+>hydra -l "root" -P rockyou.txt 10.10.10.10 http-post-form "/phpmyadmin/index.php:pma_username=^USER^&pma_password=^PASS^&server=1&target=index.php&token=229b41f3a9baa221b3a9939893367538:#1045 Cannot log in to the MySQL server" -t 50 -V
 
 I specified the username guessing that it would be the default.  Then select a wordlist.  I actually used smaller ones but they were unsuccessful. In general, don't use the big gun unless you have to.  Since we identified a HTTP POST, we tell Hydra to use POST.  Then we build the Hydra parameters.  It's basically "page:parameters:error".  Note the variables ^USER^ and ^PASS^.
 
 I let this run and grabbed a cup of tea.  I come back to success!  That was quick.  Wait... Hydra stopped but it isn't displaying a password... Note that I ran the command with "-V" or verbose, so it would output the attempts as they happened.  I noticed it stopeped at a specific line in the rockyou.txt file, so I open rockyou.txt.  It stopped after it tried a 3 character password.  Why?!?!!?!?!? (notice the amount of question marks and exclamation points)  
 
-Let's try the password in the browser.   Oh... I get a different error.  I play with it some more and realize if you give it less than 4 characters, you get an error that the password cannot be blank.  Ok, now I get it.  The password policy is probably at least 6 characters or something, so when we try less than than, we get a different error than the one I fed Hydra.  I look at the Hyrda docs to see if I can enter 2 different error codes.  Nope.  Looks like it only supports one. 
+Let's try the password in the browser.   Oh... I get a different error.  I play with it some more and realize if you give it less than 4 characters, you get an error that the password cannot be blank.  Ok, now I get it.  The password policy is probably at least 6 characters or something, so when we try less than than that, we get a different error than the one I fed Hydra.  I look at the Hyrda docs to see if I can enter 2 different error codes.  Nope.  Looks like it only supports one. 
 
-Then a tiny lightbulb goes off in my head... it would be faster and I wouldn't get the error if I just stripped values less than 5 characters or so in my password list.  I copy rockyou to a local directory.  I know sed can do this, but I'm not a Linux wizard... so I google.
+Then a tiny lightbulb goes off in my head... it would be faster and I wouldn't get the error if I just stripped values less than 5 characters or so in my password list.  I copy rockyou to a local directory.  I know sed can do this, but I'm not a Linux wizard... so I search the interwebs.
 
->>sed '/^.\{,4\}$/d' rockyou.txt -i
+>sed '/^.\{,5\}$/d' rockyou.txt -i
 
-To verify, I open rockyou.txt in Vim and look for lines of 4 characters:
+To verify, I open rockyou.txt in Vim (like a rational human being.  Who uses nano?) and look for lines of 5 characters:
 
->>/^.\{,4}$/
+>/^.\{,5}$/
 
 Looks like we are in business.  I run Hydra again with the new passowrd list.  And wait.  And wait.  I go though all my notes so far.  Did I miss anything?  Should we spin up a Hydra to brute force SSH at the same time?  Could this box be all about brute force?
 
@@ -321,7 +321,7 @@ Are those usernames and a hashed password?  w00t!  I copy the hash off and throw
 
 Dang it.  What kind of hash is it?  One resource I always reference for hashes is [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) and the command line hashid.
 
->>hashid YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE
+>hashid YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE
 Analyzing 'YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE'
 [+] Cisco-IOS(SHA-256) 
 [+] Cisco Type 4 
