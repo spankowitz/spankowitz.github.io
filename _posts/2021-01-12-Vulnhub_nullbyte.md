@@ -319,14 +319,14 @@ Are those usernames and a hashed password?  w00t!  I copy the hash off and throw
 
 ![nullbytehome](/images/nb7.png)
 
-Dang it.  What kind of hash is it?  One resource I always reference for hashes is [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) and the command line hashid.
+Dang it.  What kind of hash is it?  Two resources I always reference for hashes are [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) and the command line hashid.
 
 >hashid YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE
 Analyzing 'YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE'
 [+] Cisco-IOS(SHA-256) 
 [+] Cisco Type 4 
 
-Cisco?  We're not on a router.  I find another site to crack Cisco SHA256.  That doesn't work either.  Something is off here.  I repeat the entire process, racking my brain.  This doesn't make any sense.  Fianlly, I'm staring at the hash and it dawns on me... this looks a lot like base64 except it's missing equals signs.
+Cisco?  We're not on a router.  I find another site to crack Cisco SHA256.  That doesn't work either.  Something is off here.  I repeat the entire process, racking my brain.  This doesn't make any sense.  Finally, I'm staring at the hash and it dawns on me... this looks a lot like base64 except it's missing equals signs.  Let's add some and try to decode it.
 
 ```
 # echo "YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE==" | base64 -d
@@ -384,7 +384,7 @@ There's local.txt, grab the flag.
 
 Now here is where I like this box.  We did that, but we were root inside of phpMyAdmin.  Couldn't we have done something else?  Remember that uploads directory?  Was that a red herring?  I go back to phpMYAdmin and start poking again.  At the top there is a "SQL" tab.  Huh, so I can run SQL.  I already have the contents of the "seth" database though.  I've done other boxes where you trick SQL to run code.  And phpMyAdmin is written in PHP... can I get a PHP web shell?  I check my cheat sheet for PHP and SQL, but alas I have no notes on it.  So I do what everyone does: search the web.
 
-I finall come across this guy: ~[m4mshackers](http://m4mshackers.blogspot.com/2013/07/shell-uploading-through-phpmyadmin.html).  They're trying to do exactly what I am!  I also found this nicer looking shell: ![phpMyAdmin Shell](https://github.com/nullbind/Other-Projects/blob/master/random/phpMyAdminWebShell.sql)
+I finall come across this guy: [m4mshackers](http://m4mshackers.blogspot.com/2013/07/shell-uploading-through-phpmyadmin.html).  They're trying to do exactly what I am!  I also found this nicer looking shell: [phpMyAdmin Shell](https://github.com/nullbind/Other-Projects/blob/master/random/phpMyAdminWebShell.sql)
 
 I try to use the latter shell:
 
