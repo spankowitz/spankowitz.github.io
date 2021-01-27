@@ -767,7 +767,7 @@ It's nasty formatting, but I see creds!  Wait, root already?  That's too easy.  
 
 Let's use our new creds and login.  I see a "wordpress" database name on the left hand side and we find more creds.  Well, the notch username and a password hash.
 
-![blockyhome](/images/blocky.png)
+![blockyhome](/images/blocky5.png)
 
 To recap, I have phpymadmin creds as the "root" user and now these new creds.  SSH is available, and we haven't penetrated the WordPress login yet.
 
