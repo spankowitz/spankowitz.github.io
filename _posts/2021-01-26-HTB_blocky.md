@@ -763,26 +763,6 @@ Q*�
 
 It's nasty formatting, but I see creds!  Wait, root already?  That's too easy.  I try to SSH using the creds, nope.  I try the WordPress site, nope.  Hmmm... WAIT, that phpmyadmin site!
 
-## Initial Compromise
-
-This is where this box gets fun.  To use Hydra to brute force a login, you'll need to capture the parameters and identify the HTTP method (POST, etc).  You can easily do this in Chrome developer tools, but I looooooove Burp Suite.  Let's fire up Burp and navigate to the phpMyAdmin login page. 
-
-The newest Burp is pretty aesthetically pleasing.  Make sure intercept is turned on and your browser is set.  Maybe I'll go over that setup in another post.  Go back to your browser, enter some creds and hit "go" then pop over to Burp.  Send that request to Repeater so we can mess with the request:
-
-Note the top and bottom of the request pane.  It's an HTTP POST with the pma_username, pma_password, target... and on the right pane, the error message when you fail to login.  Now we've got good info for Hydra.  Still, I sent a few requests changing the password and the token just to see if I could cause different errors.  Nothing crazy happened, so it's time to try Hydra.
-
-### Hydra
-
-Hydra is another versatile tool well worth putting in your cheat sheet.  Here's the command I drew up:
-
->hydra -l "root" -P rockyou.txt 10.10.10.10 http-post-form "/phpmyadmin/index.php:pma_username=^USER^&pma_password=^PASS^&server=1&target=index.php&token=229b41f3a9baa221b3a9939893367538:#1045 Cannot log in to the MySQL server" -t 50 -V
-
-```
-[80][http-post-form] host: 10.10.10.10   login: root   password: sunnyvale
-1 of 1 target successfully completed, 1 valid password found
-Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2021-01-09 00:53:48
-```
-
 ### phpMyAdmin
 
 Let's use our new creds and login.  I see a "wordpress" database name on the left hand side and we find more creds.  Well, the notch username and a password hash.
