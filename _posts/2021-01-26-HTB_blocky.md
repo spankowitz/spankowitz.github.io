@@ -830,4 +830,4 @@ User notch may run the following commands on Blocky:
     (ALL : ALL) ALL
 ```
 
-Well that's easy, just sudo su and we're out of here!  Grab the root flag and we're done.  This has me wondering about the WordPress site though.  Would my bruteforce attacks ever have been successful?  how long would hashcat have taken?
+Well that's easy, just sudo su and we're out of here!  Grab the root flag and we're done.  This has me wondering about the WordPress site though.  Would my bruteforce attacks ever have been successful?  How long would hashcat have taken?
