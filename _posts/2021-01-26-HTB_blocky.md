@@ -135,7 +135,7 @@ And we have something interesting navigating to plugins...
 
 ![blockyhome](/images/blocky6.png)
 
-I download the 2 files.  I also decide to kick off my trusty wpscan to see what our angle is.  An outdated extension?  A super old version?  While we're at it, let's also kick off our old buddy Nikto.
+I download the 2 files.  I also decide to kick off my trusty WPscan to see what our angle is.  An outdated extension?  A super old version?  While we're at it, let's also kick off our old buddy Nikto.
 
 ### WordPRess Scan
 
