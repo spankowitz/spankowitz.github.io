@@ -84,6 +84,8 @@ Nope.  My guess is SSH is how we privesc or something, so let's move on and chec
 
 > gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://10.10.10.37 -t 25
 
+Side bar:  I've got to get in the habit of specifying "-a" and a user agent string.  Otherwise gobuster provides the gobuster user agent, a dead give away to anyone actually looking at the logs that someone is running gobuster.
+
 No Robots.txt, but we enumerated Apache (confirming the NMAP):
 
 > The requested URL /robots.txt was not found on this server.
