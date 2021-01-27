@@ -2,7 +2,7 @@
 
 ---
 layout: post
-title: HackTheBox:Blocky
+title: HackTheBox Blocky
 ---
 
 Today's box on my OSCP journey is Blocky from HackTheBox.  I've been using HackTheBox for a year now and I really like it.  When you VPN in, if you need a tool, you have internet access to download/update.  It's a minopr thing but convenient when you are learning.  This box was good enumeration practice.  Here's how I thought through it.
@@ -386,7 +386,6 @@ nikto -host http://10.10.10.37
 + End Time:           2021-01-26 21:32:16 (GMT-5) (301 seconds)
 ---------------------------------------------------------------------------
 + 1 host(s) tested
-
 ```
 
 Nikto confirms what we already figured out.  Good job little buddy.
@@ -395,21 +394,14 @@ Nikto confirms what we already figured out.  Good job little buddy.
 
 Now here is where I spent some time to learn something new.  XMLRPC is basically an API for WordPress.  I had never seen it before, so I had to play with it.  Of course I begin by reading up a bit on it and quickly find a tutorial: [XMLRPC Hackin](https://nitesculucian.github.io/2019/07/01/exploiting-the-xmlrpc-php-on-all-wordpress-versions/)
 
-```HTTP/1.1 200 OK
-
+```
+HTTP/1.1 200 OK
 Date: Wed, 27 Jan 2021 03:04:19 GMT
-
 Server: Apache/2.4.18 (Ubuntu)
-
 Connection: close
-
 Vary: Accept-Encoding
-
 Content-Length: 4272
-
 Content-Type: text/xml; charset=UTF-8
-
-
 
 <?xml version="1.0" encoding="UTF-8"?>
 <methodResponse>
@@ -505,8 +497,6 @@ Content-Type: text/xml; charset=UTF-8
 ```
 
 I follow the demo and have Intruder in Burp start brute forcing logins.  That reminds me that I have a wordpress page, so I start bruteforcing that with Hydra.  Use Burp to capture the login attempt to grab your parameters.
-
-
 
 > hydra -l notch -P /usr/share/wordlists/fasttrack.txt 10.10.10.37 http-post-form "/wp-login.php:log=^USER^&pwd=^PASS^&wp-submit=Log+In&redirect_to=http%3A%2F%2F10.10.10.37%2Fwp-admin%2F:ERROR: Invalid username. Lost your password?" -t 5
 
@@ -774,8 +764,6 @@ This is where this box gets fun.  To use Hydra to brute force a login, you'll ne
 
 The newest Burp is pretty aesthetically pleasing.  Make sure intercept is turned on and your browser is set.  Maybe I'll go over that setup in another post.  Go back to your browser, enter some creds and hit "go" then pop over to Burp.  Send that request to Repeater so we can mess with the request:
 
-![nullbytehome](/images/nb5.png)
-
 Note the top and bottom of the request pane.  It's an HTTP POST with the pma_username, pma_password, target... and on the right pane, the error message when you fail to login.  Now we've got good info for Hydra.  Still, I sent a few requests changing the password and the token just to see if I could cause different errors.  Nothing crazy happened, so it's time to try Hydra.
 
 ### Hydra
@@ -783,8 +771,6 @@ Note the top and bottom of the request pane.  It's an HTTP POST with the pma_use
 Hydra is another versatile tool well worth putting in your cheat sheet.  Here's the command I drew up:
 
 >hydra -l "root" -P rockyou.txt 10.10.10.10 http-post-form "/phpmyadmin/index.php:pma_username=^USER^&pma_password=^PASS^&server=1&target=index.php&token=229b41f3a9baa221b3a9939893367538:#1045 Cannot log in to the MySQL server" -t 50 -V
-
-
 
 ```
 [80][http-post-form] host: 10.10.10.10   login: root   password: sunnyvale
@@ -796,7 +782,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2021-01-09 00:53:
 
 Let's use our new creds and login.  I see a "wordpress" database name on the left hand side and we find more creds.  Well, the notch username and a password hash.
 
-![blockyhome](/images/blocky6.png)
+![blockyhome](/images/blocky.png)
 
 To recap, I have phpymadmin creds as the "root" user and now these new creds.  SSH is available, and we haven't penetrated the WordPress login yet.
 
