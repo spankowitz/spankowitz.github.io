@@ -129,6 +129,11 @@ by OJ Reeves (@TheColonial) & Christian Mehlmauer (@_FireFart_)
 Web is looking promising.  We've got a WordPress login and a phpmyadmin login.  Wiki might be interesting.  Content might be interesting... I manually enumerate them.  Plugins is the most interesting. 
 
 ![blockyhome](/images/blocky3.png)
+![blockyhome](/images/blocky4.png)
+
+And we have something interesting navigating to plugins...
+
+![blockyhome](/images/blocky6.png)
 
 I download the 2 files.  I also decide to kick off my trusty wpscan to see what our angle is.  An outdated extension?  A super old version?  While we're at it, let's also kick off our old buddy Nikto.
 
