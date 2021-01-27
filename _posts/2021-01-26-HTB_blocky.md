@@ -778,7 +778,7 @@ hashid "$P$BiVoTj899ItS1EZnMhqeqVbrZI4Oq0"
 Analyzing ''
 [+] Unknown hash
 
-root@kali:~/Desktop/htb/blocky/com/myfirstplugin# hash-identifier 
+hash-identifier 
    #########################################################################
    #     __  __                     __           ______    _____           #
    #    /\ \/\ \                   /\ \         /\__  _\  /\  _ `\         #
